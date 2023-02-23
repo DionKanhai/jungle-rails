@@ -11,22 +11,23 @@ RSpec.describe User, type: :model do
       )
 }
 
-  describe 'Validations' do
-    it "is valid with the valid attributes" do
-      expect(subject).to be_valid
-      expect(subject.errors.full_messages).to be_empty
-    end
 
-    it "is not valid without an email" do
-      subject.email = nil
-      expect(subject).to_not be_valid
-      expect(subject.errors.full_messages).to include("Email can't be blank")
-    end
-
-    it "is not valid without an first name" do
-      subject.first_name = nil
-      expect(subject).to_not be_valid
-      expect(subject.errors.full_messages).to include("First name can't be blank")
+describe 'Validations' do
+  it "is valid with the valid attributes" do
+    expect(subject).to be_valid
+    expect(subject.errors.full_messages).to be_empty
+  end
+  
+  it "is not valid without an email" do
+    subject.email = nil
+    expect(subject).to_not be_valid
+    expect(subject.errors.full_messages).to include("Email can't be blank")
+  end
+  
+  it "is not valid without an first name" do
+    subject.first_name = nil
+    expect(subject).to_not be_valid
+    expect(subject.errors.full_messages).to include("First name can't be blank")
     end
 
     it "is not valid without an last name" do
@@ -69,12 +70,19 @@ RSpec.describe User, type: :model do
   end
 
 
+
   describe '.authenticate_with_credentials' do
     
     it "authenticates when authentication credentials are valid" do
-      subject.save!
-      a = User.authenticate_with_credentials(subject.email, subject.password)
-      expect(a).to eq(subject)
+      @user = User.create(
+        email: "TEST1@TEST.com",
+        first_name: "Billy1",
+        last_name: "Jean1",
+        password: "LIGHTBULB",
+        password_confirmation: "LIGHTBULB"
+      )
+      a = User.authenticate_with_credentials(@user.email, @user.password)
+      expect(a.email).to eq("TEST1@TEST.com")
     end
   end
 end
